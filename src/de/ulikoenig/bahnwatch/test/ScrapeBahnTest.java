@@ -3,6 +3,7 @@ package de.ulikoenig.bahnwatch.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.nio.file.Paths;
 import java.util.SortedSet;
 
 import org.junit.Test;
@@ -13,7 +14,9 @@ import de.ulikoenig.bahnwatch.TrainStop;
 
 public class ScrapeBahnTest {
 
-	 @Test
+	 private static final String SAMPLE_DIR = Paths.get(".").toAbsolutePath().normalize().toString()+java.io.File.separator+"samples"+java.io.File.separator;
+
+	@Test
 	 public void testScrapeBahn() {
 	 ScrapeBahn sc = new ScrapeBahn();
 	 TrainInfo ti = sc.scrapeBahn(21424);
@@ -24,11 +27,11 @@ public class ScrapeBahnTest {
 	@Test
 	public void testScrapeBahnLokal21428() {
 		ScrapeBahn sc = new ScrapeBahn();
-		TrainInfo ti = sc.scrapeBahn("/home/ukoenig/eclipse-workspace/BahnWatch/samples/2018-05-06-21428-problem.htm");
+		TrainInfo ti = sc.scrapeBahn(SAMPLE_DIR+"2018-05-06-21428-problem.htm");
 		assertNotNull(ti);
 		// System.out.println(ti.toString());
 		assertEquals(ti.getProblem(),
-				"Störung an einem Bahnübergang: Auf der Strecke Lübeck Hbf - Hamburg Hbf zwischen Lübeck Hbf und Reinfeld(Holst). Es kommt zu Verspätungen in beide Richtungen im Regionalverkehr der Deutschen Bahn.");
+				"St\u00f6rung an einem Bahn\u00fcbergang: Auf der Strecke L\u00fcbeck Hbf - Hamburg Hbf zwischen L\u00fcbeck Hbf und Reinfeld(Holst). Es kommt zu Versp\u00e4tungen in beide Richtungen im Regionalverkehr der Deutschen Bahn.");
 		SortedSet<TrainStop> stops = ti.getTrainStops();
 		assertEquals(4, stops.size());
 	}
