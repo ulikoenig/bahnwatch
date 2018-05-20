@@ -1,11 +1,12 @@
 package de.ulikoenig.bahnwatch;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 /**
@@ -90,21 +91,32 @@ public class TrainInfo {
 		String boldStation = route1.getElementsByClass("bold").first().text();
 		String allStations = route1.text().replaceFirst(boldStation, "");
 
-		// Störung
+		// Stoerung
 		Elements stoerung = route1.getElementsByClass("red bold");
 		this.problem = stoerung.text();
 		allStations = allStations.replace(problem, "");
 
-		// Stations aussortieren
-		String[] stops = allStations.trim().split("([ ]*[\\d]*:[\\d]*[ -]*[ ]*)");
-		for (int i = 0; i < stops.length; i++) {
-			stops[i].replaceAll("\\d\\d:\\d\\d", "");
-			String[] parts = allStations.split(stops[i].replace("(","\\(").replace(")","\\)"));
-			parts = parts[1].split("-");
-			String[] abfahrtZeit = parts[0].trim().split(":");
+		for (Iterator<Node> iterator = route1.childNodes().iterator(); iterator.hasNext();) {
+			Node element = iterator.next();
+			if (element instanceof TextNode) {
+				TextNode textNode = (TextNode) element;
+				String allStops = textNode.toString();
+				if (!allStops.trim().isEmpty()) {
+					// Stations aussortieren
+					String[] stops = allStops.trim().split("([ ]*[\\d]*:[\\d]*[ -]*[ ]*)");
+					for (int i = 0; i < stops.length; i++) {
+						stops[i].replaceAll("\\d\\d:\\d\\d", "");
+						String[] parts = allStops.split(stops[i].replace("(", "\\(").replace(")", "\\)"));
+						parts = parts[1].split("-");
+						String[] abfahrtZeit = parts[0].trim().split(":");
 
-			trainStops.add(new TrainStop(stops[i], Integer.parseInt(abfahrtZeit[0]), Integer.parseInt(abfahrtZeit[1])));
+						trainStops.add(new TrainStop(stops[i], Integer.parseInt(abfahrtZeit[0]),
+								Integer.parseInt(abfahrtZeit[1])));
+					}
+				}
+			}
 		}
+
 	}
 
 	public Elements getRis() {

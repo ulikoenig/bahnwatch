@@ -14,20 +14,31 @@ import de.ulikoenig.bahnwatch.TrainStop;
 
 public class ScrapeBahnTest {
 
-	 private static final String SAMPLE_DIR = Paths.get(".").toAbsolutePath().normalize().toString()+java.io.File.separator+"samples"+java.io.File.separator;
+	private static final String SAMPLE_DIR = Paths.get(".").toAbsolutePath().normalize().toString()
+			+ java.io.File.separator + "samples" + java.io.File.separator;
 
 	@Test
-	 public void testScrapeBahn() {
-	 ScrapeBahn sc = new ScrapeBahn();
-	 TrainInfo ti = sc.scrapeBahn(21424);
-	 System.out.println(ti.toString());
-	 assertNotNull(ti);
-	 }
+	public void testScrapeBahn() {
+		ScrapeBahn sc = new ScrapeBahn();
+		TrainInfo ti = sc.scrapeBahn(21424);
+		assertNotNull(ti);
+
+		TrainStop[] ts = sortedSetToArray(ti.getTrainStops());
+		assertEquals(new TrainStop("Hamburg Hbf", 16, 4), ts[0]);
+		assertEquals(new TrainStop("Bad Oldesloe", 16, 29), ts[1]);
+		assertEquals(new TrainStop("Reinfeld(Holst)", 16, 35), ts[2]);
+		assertEquals(new TrainStop("Lübeck Hbf", 16, 48), ts[3]);
+		//assertEquals(new TrainStop("Lübeck-Dänischburg IKEA", 17, 4), ts[4]);
+	}
+
+	private TrainStop[] sortedSetToArray(SortedSet<TrainStop> sortedSet) {
+		return sortedSet.toArray(new TrainStop[sortedSet.size()]);
+	}
 
 	@Test
 	public void testScrapeBahnLokal21428() {
 		ScrapeBahn sc = new ScrapeBahn();
-		TrainInfo ti = sc.scrapeBahn(SAMPLE_DIR+"2018-05-06-21428-problem.htm");
+		TrainInfo ti = sc.scrapeBahn(SAMPLE_DIR + "2018-05-06-21428-problem.htm");
 		assertNotNull(ti);
 		// System.out.println(ti.toString());
 		assertEquals(ti.getProblem(),
