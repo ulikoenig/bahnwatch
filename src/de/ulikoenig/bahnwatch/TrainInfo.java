@@ -22,6 +22,7 @@ public class TrainInfo {
 	private SortedSet<TrainStop> trainStops;
 	private Elements ris;
 	private String problem;
+	private String trainDetailsURL;
 
 	@Override
 	public String toString() {
@@ -67,7 +68,7 @@ public class TrainInfo {
 
 	public void setTrain(Elements train) {
 		this.train = train;
-
+		this.trainDetailsURL= train.first().getElementsByAttribute("href").attr("href");
 	}
 
 	public Elements getPlatfrom() {
