@@ -30,8 +30,8 @@ public class ScrapeBahnTest {
 		assertEquals(new TrainStop("Hamburg Hbf", 16, 4), ts[0]);
 		assertEquals(new TrainStop("Bad Oldesloe", 16, 29), ts[1]);
 		assertEquals(new TrainStop("Reinfeld(Holst)", 16, 35), ts[2]);
-		assertEquals(new TrainStop("Lübeck Hbf", 16, 48), ts[3]);
-		// assertEquals(new TrainStop("Lübeck-Dänischburg IKEA", 17, 4), ts[4]);
+		assertEquals(new TrainStop("L\\u00fcbeck Hbf", 16, 48), ts[3]);
+		// assertEquals(new TrainStop("Lï¿½beck-Dï¿½nischburg IKEA", 17, 4), ts[4]);
 	}
 
 	private TrainStop[] sortedSetToArray(SortedSet<TrainStop> sortedSet) {
